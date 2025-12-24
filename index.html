@@ -2,60 +2,102 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>QTX Payout Certificate Generator</title>
+<title>QTX Premium Payout Certificate</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 body{
-  background:#0b0f1a;
-  font-family:Arial;
-  color:white;
+  background:radial-gradient(circle at top,#111827,#020617);
+  font-family:'Segoe UI',Arial;
+  color:#f8fafc;
   text-align:center;
 }
 .container{
-  max-width:420px;
+  max-width:430px;
   margin:auto;
+  padding:10px;
 }
 .logo img{
   width:120px;
-  margin:15px auto;
+  margin:20px auto 10px;
 }
 input{
   width:100%;
-  padding:10px;
+  padding:12px;
   margin:7px 0;
-  border-radius:5px;
+  border-radius:8px;
   border:none;
+  font-size:14px;
 }
 button{
-  padding:10px 20px;
-  margin:8px;
-  background:#00c853;
+  width:100%;
+  padding:12px;
+  margin-top:10px;
   border:none;
-  color:white;
+  border-radius:8px;
   font-size:16px;
+  font-weight:600;
   cursor:pointer;
-  border-radius:5px;
 }
-.banner{
-  margin-top:20px;
-  background:#111;
-  border:2px solid gold;
-  padding:20px;
-}
-h2,h3{color:gold;}
-.qr img{margin-top:10px;}
-.signature{
-  margin-top:15px;
-  font-family:cursive;
-  font-size:20px;
+.generate{
+  background:linear-gradient(90deg,#16a34a,#22c55e);
+  color:#fff;
 }
 .download{
-  background:#2979ff;
+  background:linear-gradient(90deg,#2563eb,#3b82f6);
+  color:#fff;
+}
+
+.certificate{
+  margin-top:25px;
+  padding:25px 18px;
+  border-radius:18px;
+  background:linear-gradient(180deg,#020617,#0f172a);
+  border:2px solid #d4af37;
+  box-shadow:0 0 30px rgba(212,175,55,.25);
+}
+.certificate h3{
+  color:#d4af37;
+  margin-bottom:5px;
+  letter-spacing:1px;
+}
+.subtitle{
+  font-size:12px;
+  color:#94a3b8;
+  margin-bottom:15px;
+}
+.row{
+  display:flex;
+  justify-content:space-between;
+  padding:6px 0;
+  border-bottom:1px dashed #334155;
+  font-size:14px;
 }
 .label{
-  color:#aaa;
+  color:#cbd5f5;
+}
+.value{
+  font-weight:600;
+}
+.status{
+  margin:15px 0;
+  color:#22c55e;
+  font-weight:700;
+}
+.qr img{
+  margin-top:10px;
+}
+.signature{
+  margin-top:18px;
+  font-family:cursive;
+  font-size:22px;
+  color:#d4af37;
+}
+.footer{
+  margin-top:8px;
+  font-size:11px;
+  color:#94a3b8;
 }
 </style>
 </head>
@@ -69,38 +111,52 @@ h2,h3{color:gold;}
     <img src="quotex-logo.png">
   </div>
 
-  <h2>QTX PAYOUT CERTIFICATE</h2>
-
-  <!-- INPUTS -->
+  <!-- INPUT FORM -->
   <input id="name" placeholder="Trader Name">
-  <input id="funded" placeholder="Funded Account Size (e.g. $5,000)">
+  <input id="funded" placeholder="Funded Account Size (e.g. $10,000)">
   <input id="withdraw" placeholder="Withdrawal Amount (₹ / $)">
   <input id="date" placeholder="Withdrawal Date">
 
-  <button onclick="generate()">Generate Certificate</button>
+  <button class="generate" onclick="generate()">Generate Premium Certificate</button>
 
   <!-- CERTIFICATE -->
-  <div class="banner" id="banner" style="display:none;">
+  <div class="certificate" id="certificate" style="display:none;">
 
     <img src="quotex-logo.png" width="80"><br><br>
 
-    <h3>PAYOUT SUCCESSFULLY COMPLETED 🎉</h3>
+    <h3>OFFICIAL PAYOUT CERTIFICATE</h3>
+    <div class="subtitle">QTX FUNDED ACCOUNT • VERIFIED RESULT</div>
 
-    <p><span class="label">Trader Name:</span> <b id="rname"></b></p>
-    <p><span class="label">Funded Account Size:</span> <b id="rfunded"></b></p>
-    <p><span class="label">Withdrawal Amount:</span> <b id="rwithdraw"></b></p>
-    <p><span class="label">Withdrawal Date:</span> <b id="rdate"></b></p>
+    <div class="row">
+      <span class="label">Trader Name</span>
+      <span class="value" id="rname"></span>
+    </div>
 
-    <p>Paid by <b>QTX FUNDED ACCOUNT</b></p>
+    <div class="row">
+      <span class="label">Funded Account Size</span>
+      <span class="value" id="rfunded"></span>
+    </div>
 
-    <!-- QR -->
+    <div class="row">
+      <span class="label">Withdrawal Amount</span>
+      <span class="value" id="rwithdraw"></span>
+    </div>
+
+    <div class="row">
+      <span class="label">Withdrawal Date</span>
+      <span class="value" id="rdate"></span>
+    </div>
+
+    <div class="status">✔ PAYOUT SUCCESSFULLY COMPLETED</div>
+
     <div class="qr">
       <img id="qr">
     </div>
 
-    <!-- SIGNATURE -->
-    <div class="signature">
-      — Devil
+    <div class="signature">— Devil</div>
+
+    <div class="footer">
+      Scan QR to verify • deviltrader999.github.io/Qtx-funded-account-/
     </div>
 
   </div>
@@ -111,23 +167,22 @@ h2,h3{color:gold;}
 
 <script>
 function generate(){
-  document.getElementById("banner").style.display="block";
-
+  certificate.style.display="block";
   rname.innerText=name.value;
   rfunded.innerText=funded.value;
   rwithdraw.innerText=withdraw.value;
   rdate.innerText=date.value;
 
   let site="https://deviltrader999.github.io/Qtx-funded-account-/";
-  qr.src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data="+site;
+  qr.src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data="+site;
 }
 
 function download(){
-  html2canvas(document.getElementById("banner")).then(canvas=>{
-    let link=document.createElement("a");
-    link.download="QTX_Payout_Certificate.png";
-    link.href=canvas.toDataURL();
-    link.click();
+  html2canvas(document.getElementById("certificate")).then(canvas=>{
+    let a=document.createElement("a");
+    a.download="QTX_Premium_Payout_Certificate.png";
+    a.href=canvas.toDataURL();
+    a.click();
   });
 }
 </script>
