@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QTX Payout Certificate Generator</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+body{
+  background:#0b0f1a;
+  font-family:Arial;
+  color:white;
+  text-align:center;
+}
+.container{
+  max-width:420px;
+  margin:auto;
+}
+.logo img{
+  width:120px;
+  margin:15px auto;
+}
+input{
+  width:100%;
+  padding:10px;
+  margin:7px 0;
+  border-radius:5px;
+  border:none;
+}
+button{
+  padding:10px 20px;
+  margin:8px;
+  background:#00c853;
+  border:none;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  border-radius:5px;
+}
+.banner{
+  margin-top:20px;
+  background:#111;
+  border:2px solid gold;
+  padding:20px;
+}
+h2,h3{color:gold;}
+.qr img{margin-top:10px;}
+.signature{
+  margin-top:15px;
+  font-family:cursive;
+  font-size:20px;
+}
+.download{
+  background:#2979ff;
+}
+.label{
+  color:#aaa;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- LOGO -->
+  <div class="logo">
+    <img src="quotex-logo.png">
+  </div>
+
+  <h2>QTX PAYOUT CERTIFICATE</h2>
+
+  <!-- INPUTS -->
+  <input id="name" placeholder="Trader Name">
+  <input id="funded" placeholder="Funded Account Size (e.g. $5,000)">
+  <input id="withdraw" placeholder="Withdrawal Amount (₹ / $)">
+  <input id="date" placeholder="Withdrawal Date">
+
+  <button onclick="generate()">Generate Certificate</button>
+
+  <!-- CERTIFICATE -->
+  <div class="banner" id="banner" style="display:none;">
+
+    <img src="quotex-logo.png" width="80"><br><br>
+
+    <h3>PAYOUT SUCCESSFULLY COMPLETED 🎉</h3>
+
+    <p><span class="label">Trader Name:</span> <b id="rname"></b></p>
+    <p><span class="label">Funded Account Size:</span> <b id="rfunded"></b></p>
+    <p><span class="label">Withdrawal Amount:</span> <b id="rwithdraw"></b></p>
+    <p><span class="label">Withdrawal Date:</span> <b id="rdate"></b></p>
+
+    <p>Paid by <b>QTX FUNDED ACCOUNT</b></p>
+
+    <!-- QR -->
+    <div class="qr">
+      <img id="qr">
+    </div>
+
+    <!-- SIGNATURE -->
+    <div class="signature">
+      — Devil
+    </div>
+
+  </div>
+
+  <button class="download" onclick="download()">Download PNG</button>
+
+</div>
+
+<script>
+function generate(){
+  document.getElementById("banner").style.display="block";
+
+  rname.innerText=name.value;
+  rfunded.innerText=funded.value;
+  rwithdraw.innerText=withdraw.value;
+  rdate.innerText=date.value;
+
+  let site="https://deviltrader999.github.io/Qtx-funded-account-/";
+  qr.src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data="+site;
+}
+
+function download(){
+  html2canvas(document.getElementById("banner")).then(canvas=>{
+    let link=document.createElement("a");
+    link.download="QTX_Payout_Certificate.png";
+    link.href=canvas.toDataURL();
+    link.click();
+  });
+}
+</script>
+
+</body>
+</html>
